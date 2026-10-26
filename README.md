@@ -1,40 +1,73 @@
-# Actividad de ciberseguridad y hacking ético en Kali Linux
+# Actividad de ciberseguridad: auditoría con auditd en Kali Linux
 
-Práctica de ASIR centrada en la defensa de sistemas Linux y la aplicación del principio de mínimo privilegio, realizada en una máquina virtual de laboratorio.
+Práctica de ASIR orientada a vigilar cambios en archivos críticos y aplicar el principio de mínimo privilegio en una máquina virtual de laboratorio.
 
 ## Objetivo
-Identificar configuraciones inseguras, aplicar medidas de protección y comprobar que el sistema mantiene su funcionamiento legítimo.
+Configurar auditd para registrar modificaciones relacionadas con privilegios y comprobar que las reglas funcionan y permanecen guardadas.
 
 ## Entorno
-- Kali Linux en una máquina virtual.
-- Terminal y permisos de administración.
-- Snapshot antes de realizar cambios.
-- Script de laboratorio facilitado para la actividad.
+- Kali Linux en una máquina virtual propia.
+- Permisos de administración e Internet para instalar paquetes.
+- Snapshot previo a los cambios.
 
-## Trabajo de la actividad
-- Monitorización de cambios mediante auditd.
-- Revisión de usuarios, privilegios y permisos.
-- Protección de archivos y carpetas compartidas.
-- Endurecimiento de servicios con systemd.
-- Análisis de registros y reconstrucción de incidentes.
+## Situación inicial
+Se consulta `sudo auditctl -l` y se realiza una prueba creando y eliminando un archivo en `/etc/cron.d/`. Sin reglas de vigilancia, ese cambio no genera un evento con la clave `cron`. Si se repite la práctica, pueden existir registros antiguos: hay que revisar sus horas sin borrarlos.
 
-## Metodología
-1. Observar y documentar la situación inicial.
-2. Identificar el riesgo y aplicar la corrección necesaria.
-3. Validar la protección y el funcionamiento legítimo.
-4. Recopilar evidencias y explicar lo aprendido.
+## Configuración
+Guardar estas reglas en `/etc/audit/rules.d/minpriv.rules`:
 
-## Capturas
-Las evidencias se guardan en [capturas/](capturas/), sin necesidad de organizarlas por reto.
-
-Sube las imágenes y añade sus referencias al README cuando existan. Ejemplo:
-```markdown
-![Evidencia de la actividad](capturas/evidencia-01.png)
+```text
+-w /etc/sudoers -p wa -k sudoers
+-w /etc/sudoers.d/ -p wa -k sudoers
+-w /etc/passwd -p wa -k identidad
+-w /etc/group -p wa -k identidad
+-w /etc/shadow -p wa -k identidad
+-w /etc/cron.d/ -p wa -k cron
+-w /etc/systemd/system/ -p wa -k systemd
 ```
-Las capturas deben mostrar el prompt, el comando y su salida, evitando contraseñas y datos sensibles.
 
-## Aprendizaje
-La seguridad no consiste solo en restringir permisos: también requiere observar los cambios, conservar evidencias y verificar que las medidas no interrumpen el uso legítimo.
+`-w` indica la ruta vigilada, `-p wa` registra escritura y cambios de atributos, y `-k` asigna una etiqueta para buscar los eventos.
+
+Cargar y consultar las reglas:
+
+```bash
+sudo augenrules --load
+sudo auditctl -l
+```
+
+## Validación
+Generar un cambio y consultar su registro:
+
+```bash
+sudo touch /etc/cron.d/prueba
+sudo rm /etc/cron.d/prueba
+sleep 1
+sudo ausearch -k cron -ts recent -i
+```
+
+Comprobar también la configuración persistente:
+
+```bash
+sudo cat /etc/audit/rules.d/minpriv.rules
+```
+
+La evidencia debe mostrar un evento nuevo relacionado con el archivo de prueba y las reglas activas y guardadas. Los resultados finales se acreditan con las capturas, no solo con esta descripción.
+
+## Capturas de la actividad
+Guardar las imágenes directamente en [capturas/](capturas/). Nombres sugeridos: `01-inicial.png`, `02-reglas.png` y `03-validacion.png`.
+
+Añadir las imágenes al README cuando estén subidas:
+
+```markdown
+![Situación inicial](capturas/01-inicial.png)
+![Reglas de auditoría](capturas/02-reglas.png)
+![Validación de los registros](capturas/03-validacion.png)
+```
+
+En cada captura deben verse el prompt, el comando y su salida. No incluir contraseñas ni información sensible.
+
+## Lección de seguridad
+He aprendido que auditd necesita reglas específicas para vigilar las zonas críticas y que debo verificar tanto el registro de eventos como la persistencia de la configuración.
 
 ## Alcance
-Documentación general de la práctica; no acredita por sí sola que todas las pruebas estén completadas. Uso exclusivo en entornos propios o autorizados. La entrega académica se presenta en el PDF solicitado.
+Actividad educativa realizada exclusivamente en un entorno propio o autorizado.
