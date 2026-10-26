@@ -44,11 +44,11 @@ Cada línea usa `-w` para la ruta, `-p wa` para escritura y cambios de atributos
 Creación de las reglas de auditoría
 En este paso edité con Nano el archivo /etc/audit/rules.d/minpriv.rules para definir las rutas que quería vigilar: la configuración de sudo, las cuentas y grupos, las tareas programadas y los servicios de systemd. Cada regla utiliza -w para indicar la ruta, -p wa para registrar escrituras y cambios de atributos, y -k para asignar una clave de búsqueda. El mensaje Wrote 8 lines confirma que guardé el archivo.
 
-![Proceso de configuración, evidencia provisional 1](<capturas/reto-08/Captura de pantalla 2026-10-26 171848.png>)
+![Proceso de configuración, evidencia provisional 1](<capturas/reto-08/Captura de pantalla 2026-10-26 193427.png>)
 
 sudo cat sirve para ver las reglas que has guardado, sale aquí representado
 
-![Proceso de configuración, evidencia provisional 2](<capturas/reto-08/Captura de pantalla 2026-10-26 172542.png>)
+![Proceso de configuración, evidencia provisional 2](<capturas/reto-08/Captura de pantalla 2026-10-26 193625.png>)
 
 ## 5. En caso de que coloques mal algún comando en el sudo nano como me ha pasado a mi en la mitad de la práctica
 adjunto una manera de corregir, Carga de las reglas y corrección de errores
@@ -57,7 +57,8 @@ Cargué la configuración con `sudo augenrules --load` y revisé las reglas medi
 
 ![Intento de clave](<capturas/reto-08/Captura de pantalla 2026-10-26 171939.png>)
 
-Después, muestra la clave `systemd` correctamente escrita:
+En este caso tuve un error y escribí mal el systemd , yo lo corregí dentro del sudo nano y se corrige con
+el sudo augenrules -- load, Después, muestra la clave `systemd` correctamente escrita:
 
 ![Reglas activas con las claves](<capturas/reto-08/Captura de pantalla 2026-10-26 172814.png>)
 
