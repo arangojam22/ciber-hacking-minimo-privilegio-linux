@@ -74,10 +74,15 @@ sudo ausearch -k cron -ts recent -i
 
 El objetivo es identificar la ruta del archivo y la hora del cambio, no solo encontrar un registro antiguo. La siguiente imagen queda situada provisionalmente en este apartado; su contenido debe revisarse antes de atribuirle la prueba completa.
 
-![Evidencia adicional pendiente de verificar en este paso](<capturas/reto-08/Captura de pantalla 2026-10-26 172056.png>)
+![Evidencia adicional pendiente de verificar en este paso](<capturas/reto-08/Captura de pantalla 2026-10-26 193213.png>)
 
 ## 7. Comprobación final y persistencia
-Finalmente ejecuté la comprobación del script. La salida muestra las reglas activas y el resultado `SUPERADO`, una evidencia adicional de que el comprobador aceptó la configuración.
+Finalmente ejecuté la comprobación del script. 
+```bash
+sudo bash /home/kali/Downloads/retos12.sh.txt comprobar 8
+```
+Yo lo he puesto así porque aquí estaba ubicado mi archivo, (en tu práctica será distinta)
+La salida muestra las reglas activas y el resultado `SUPERADO`, una evidencia adicional de que el comprobador aceptó la configuración.
 
 ![Reglas cargadas y comprobación superada](<capturas/reto-08/Captura de pantalla 2026-10-26 172920.png>)
 
@@ -94,3 +99,7 @@ He aprendido que tener auditd activo no basta: hay que definir reglas para las z
 
 ## Alcance y evidencias
 Actividad educativa en un entorno propio y autorizado. Las imágenes se conservan en su ubicación original; el nombre de la carpeta no divide la memoria en varias actividades. Las capturas provisionales se pueden mover o sustituir sin cambiar los pasos de la explicación.
+
+## Revisión y Verificación 
+recuerda siempre comprobar todos los comandos y tabular (si te sirve es porque está bien) en este caso no me había dado cuenta que estaba mal escrito y pensé que algún punto
+de la actividad estaba mal, verificar y tendrás tu actividad resuelta mucho antes.
